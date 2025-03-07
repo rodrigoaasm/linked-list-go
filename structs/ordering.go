@@ -120,10 +120,8 @@ func mergeSortParallel[T comparable](head *Node[T], len uint32, less func(conten
 
 	var left, right *Node[T]
 	if len > 2000 {
-		leftCh := makeMergeSortWorker(head, i, less, insertion)
 		rightCh := makeMergeSortWorker(secondHalf, len-i, less, insertion)
-
-		left = <-leftCh
+		left = mergeSortParallel(head, i, less, insertion)
 		right = <-rightCh
 	} else if len < 100 && insertion {
 		return insertionSort(head, less)
